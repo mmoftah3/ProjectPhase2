@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playerMovement : MonoBehaviour
 {
@@ -11,7 +12,11 @@ public class playerMovement : MonoBehaviour
     public Sprite Standing;
     Sprite Current;
     public bool isGrounded = false;
-    public  GameObject shield;
+    public GameObject shield;
+    public Text countText;
+
+
+    private int count;
 
     //start method
     void Start(){
@@ -36,22 +41,25 @@ public class playerMovement : MonoBehaviour
         //making player jump if space is pressed
         if (Input.GetButtonDown("Jump") && isGrounded == true){
             //change image to jumping one when we have the image
-            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, 5f), ForceMode2D.Impulse); 
+            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, 7f), ForceMode2D.Impulse); 
             
 
         }//end of if statement
     }//end of jump method
 
     IEnumerator WaiterWalk() {
-       Current = spriteRenderer.sprite;  
-        while(Current.name != "GuyWithGun" ){
-            yield return new WaitForSeconds(0.5f);   
-            //changing image to walking
-            ChangeSpriteWalk();
-            //wait one sec then change back
-            yield return new WaitForSeconds(0.5f);       
-            ChangeSpriteStand();
+        while(true){   
             Current = spriteRenderer.sprite;
+            yield return new WaitForSeconds(0.5f);   
+            while(!(Current.name == "GuyWithGun") && isGrounded==true){
+                yield return new WaitForSeconds(0.5f);   
+                //changing image to walking
+                ChangeSpriteWalk();
+                //wait one sec then change back
+                yield return new WaitForSeconds(0.5f);       
+                ChangeSpriteStand();
+                Current = spriteRenderer.sprite;
+            }
         }
     }//end of waiter method
 
@@ -66,17 +74,18 @@ public class playerMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.tag =="Ground")
+        if (collision.collider.CompareTag("Ground"))
         {
-
+            isGrounded = true; 
         }
         //To collect gems
-        if(collision.gameObject.tag == "Gems")
+        if(collision.gameObject.CompareTag("Gems"))
         {
             Destroy(collision.gameObject);
-            //Add score
+            //Increase the number of gems
+            count += 1;
         }
-        if(collision.gameObject.tag == "Box")
+        if(collision.gameObject.CompareTag("Box"))
         {
             shield.SetActive(true);
         }
@@ -85,10 +94,17 @@ public class playerMovement : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.tag == "Ground")
+         if (collision.collider.CompareTag("Ground"))
         {
-
+            isGrounded = false;
         }
+
+    }
+
+    void SetCountText()
+    {
+        //Display the score of the game
+        countText.text = "Count: " + count.ToString();
 
     }
 }//end of class

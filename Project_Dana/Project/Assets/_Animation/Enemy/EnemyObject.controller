@@ -33,7 +33,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -6388499660715670964}
-    m_Position: {x: 380, y: -30, z: 0}
+    m_Position: {x: 390, y: -30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3483381609875519409}
     m_Position: {x: 380, y: 150, z: 0}
@@ -59,6 +59,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48ab064a920f89842baebc18da7984ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 2.5
+  attackRange: 5
 --- !u!1102 &-6388499660715670964
 AnimatorState:
   serializedVersion: 5
@@ -101,7 +103,7 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
